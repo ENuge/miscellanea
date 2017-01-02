@@ -1,0 +1,44 @@
+export PATH=/usr/local/bin:/bin:/sbin:/usr/bin:/usr/local/sbin:$PATH
+
+parse_git_branch () {
+	git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/' ;
+}
+
+# Gets some color up in our profile
+export PS1="\[\033[33;1m\]\w\[\033[m\]\[\033[32m\]\$(parse_git_branch)\[\033[00m\]$ "
+export CLICOLOR=1
+export LSCOLORS=ExFxBxDxCxegedabagacad
+alias ls='ls -GFh'
+
+# Let's alias stuff yay
+alias cd..='cd ../'
+alias ..='cd ../'
+alias ...='cd ../../'
+alias .3='cd ../../../'
+alias .4='cd ../../../../'
+alias .5='cd ../../../../'
+alias .6='cd ../../../../../'
+alias .7='cd ../../../../../../'
+alias .8='cd ../../../../../../../'
+alias .9='cd ../../../../../../../../'
+alias .10='cd ../../../../../../../../../'
+
+alias f='open -a Finder ./' # Open the current directory in Finder
+alias ~='cd ~'
+alias c='clear' # Clears terminal display
+alias path='echo -e ${PATH//:/\\n}' # Echo all executable Paths
+
+mcd () { mkdir -p "$1" && cd "$1"; }        # mcd: Makes new Dir and jumps inside
+ql () { qlmanage -p "$*" >& /dev/null; }    # ql: Opens any file in MacOS Quicklook Preview
+
+# File and folder management
+zipf () { zip -r "$1".zip "$1" ; }          # zipf:         To create a ZIP archive of a folder
+alias numFiles='echo $(ls -1 | wc -l)'      # numFiles:     Count of non-hidden files in current dir
+
+# Searching
+alias qfind="find . -name "                 # qfind:    Quickly search for file
+ffs () { /usr/bin/find . -name "$@"'*' ; }  # ffs:      Find file whose name starts with a given string
+ffe () { /usr/bin/find . -name '*'"$@" ; }  # ffe:      Find file whose name ends with a given string
+
+# Find out the pid of a specified process
+findPid () { lsof -t -c "$@" ; }
