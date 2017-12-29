@@ -1,44 +1,175 @@
-export PATH=/usr/local/bin:/bin:/sbin:/usr/bin:/usr/local/sbin:$PATH
+# Sets bash history to be unlimited, not truncated. Never lose a command!
+export HISTFILESIZE=
+export HISTSIZE=
+export HISTTIMEFORMAT="[%F %T] 	"
 
-parse_git_branch () {
-	git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/' ;
+export PIP_INDEX_URL=<YELPS_PYPI_LOCATION>
+
+alias pretty-apperror='~/pg/yelp-main/virtualenv_run/bin/python ~/pg/yelp-main/tools/pretty_error_log'
+
+alias filtered-apperror=<REDACTED>
+
+alias gpoh="git push origin HEAD"
+
+alias rb="review-branch"
+
+alias sr="seagull-run"
+
+alias gsr="git push origin HEAD && seagull-run && review-branch"
+
+# Searches templates, actually ignores stuff in .tox and virtualenv_run
+stf() {
+	# TODO(eoin): This grep -v is heavyhanded, will remove code lines that mention tex and virtualenv...
+	tf $1 | grep -v '.tox' | grep -v 'virtualenv*' | grep -v 'venv' | grep -v 'No such file or directory'
 }
 
-# Gets some color up in our profile
-export PS1="\[\033[33;1m\]\w\[\033[m\]\[\033[32m\]\$(parse_git_branch)\[\033[00m\]$ "
-export CLICOLOR=1
-export LSCOLORS=ExFxBxDxCxegedabagacad
-alias ls='ls -GFh'
+# Searches templates and Python, doesn't output grep errors.
+tpf() {
+	pf $1 | grep -v 'No such file or directory'
+	tf $1 | grep -v 'No such file or directory'
+}
 
-# Let's alias stuff yay
-alias cd..='cd ../'
-alias ..='cd ../'
-alias ...='cd ../../'
-alias .3='cd ../../../'
-alias .4='cd ../../../../'
-alias .5='cd ../../../../'
-alias .6='cd ../../../../../'
-alias .7='cd ../../../../../../'
-alias .8='cd ../../../../../../../'
-alias .9='cd ../../../../../../../../'
-alias .10='cd ../../../../../../../../../'
+# Searches JS and Python, no .tmpls, doesn't output grep errors.
+jpf() {
+	pf $1 | grep -v 'No such file or directory'
+	tf --js-only $1 | grep -v 'No such file or directory'
+}
 
-alias f='open -a Finder ./' # Open the current directory in Finder
-alias ~='cd ~'
-alias c='clear' # Clears terminal display
-alias path='echo -e ${PATH//:/\\n}' # Echo all executable Paths
+# Git grep with line numbers, skip binary files, and show filenames
+sgrep() {
+	git grep -I -n -H $1 
+}
 
-mcd () { mkdir -p "$1" && cd "$1"; }        # mcd: Makes new Dir and jumps inside
-ql () { qlmanage -p "$*" >& /dev/null; }    # ql: Opens any file in MacOS Quicklook Preview
+# Merges a branch into the mainline for services, from: <REDACTED>
+# If you supply an argument, I assume it's for a git tag that you want to push.
+goym() {
+	FEATURE_BRANCH=`git rev-parse --abbrev-ref HEAD`
+	git fetch origin
+	git checkout master
+	git pull --ff-only origin master
+	git merge --no-ff $FEATURE_BRANCH
+	if [ -n "$1" ]; then git tag $1 && git push origin --tags HEAD; else git push origin HEAD; fi
+}
 
-# File and folder management
-zipf () { zip -r "$1".zip "$1" ; }          # zipf:         To create a ZIP archive of a folder
-alias numFiles='echo $(ls -1 | wc -l)'      # numFiles:     Count of non-hidden files in current dir
+fetch-deploy() {
+    git fetch canon $1 && git co -b {,canon/}$1
+}
 
-# Searching
-alias qfind="find . -name "                 # qfind:    Quickly search for file
-ffs () { /usr/bin/find . -name "$@"'*' ; }  # ffs:      Find file whose name starts with a given string
-ffe () { /usr/bin/find . -name '*'"$@" ; }  # ffe:      Find file whose name ends with a given string
+alias bizapp-tests='./scripts/jenkins/run_jenkins.sh'
+alias sshprod=<REDACTED>
+alias sshdeploy=<REDACTED>
+skewl() {
+    ssh -A <REDACTED> -k "kew list | grep $@"
+}
+skew() {
+    echo "You are about to run on <REDACTED>: "
+    echo "kew" "$@"
+    confirm &&
+    echo "CONFIRMED, RUNNING" && 
+    ssh -A <REDACTED> -k "kew $@"
+}
 
-# Find out the pid of a specified process
-findPid () { lsof -t -c "$@" ; }
+subl() {
+    # Strips the initial bit, /nail/home/eoin/, to get relative dir
+    # Count to get what you want and replace the subl dir to where your mount is
+    # Dirty and terrible but works. *shrug*
+    local RELATIVE_PWD="${PWD:16}"
+    ssh -p <PORT> <HOST> "source ~/.bash_profile && subl /Users/eoin/Documents/yelp/mount/$RELATIVE_PWD/$1"
+}
+
+alias scribe='scribereader -s <REDACTED>'
+
+# lets you ask for y/n check permission before running a command
+confirm() {
+    # call with a prompt string or use a default
+    read -r -p "${1:-Are you sure? [y/N]} " response
+    case "$response" in
+        [yY][eE][sS]|[yY]) 
+            true
+            ;;
+        *)
+            false
+            ;;
+    esac
+}
+
+# Just a shorter name for git yelp-list-repos, assumes we're grepping for something
+gitlist() {
+    git yelp-list-repos | grep $1
+}
+
+# Runs history through a grep, slightly nicer!
+alias h="history | grep "
+
+# install fzf on ssh enter
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+
+# fuzzy open files using vim!
+fe() {
+  local files
+  IFS=$'\n' files=($(fzf-tmux --query="$1" --multi --select-1 --exit-0))
+  [[ -n "$files" ]] && ${EDITOR:-vim} "${files[@]}"
+}
+
+# fuzzy grep open based on the text on that line of the file
+vg() {
+  local file
+
+  file="$(ag --nobreak --noheading $@ | fzf -0 -1 | awk -F: '{print $1 " +" $2}')"
+
+  if [[ -n $file ]]
+  then
+     vim $file
+  fi
+}
+
+# fd - cd to selected directory
+fd() {
+  local dir
+  dir=$(find ${1:-.} -path '*/\.*' -prune \
+                  -o -type d -print 2> /dev/null | fzf +m) &&
+  cd "$dir"
+}
+
+# fd but only one level deep
+fd1() {
+  DIR=`find * -maxdepth 0 -type d -print 2> /dev/null | fzf-tmux` \
+    && cd "$DIR"
+}
+
+# cdf - cd into the directory of the selected file
+cdf() {
+   local file
+   local dir
+   file=$(fzf +m -q "$1") && dir=$(dirname "$file") && cd "$dir"
+}
+
+# fbr - checkout git branch (including remote branches)
+fbr() {
+  local branches branch
+  branches=$(git branch --all | grep -v HEAD) &&
+  branch=$(echo "$branches" |
+           fzf-tmux -d $(( 2 + $(wc -l <<< "$branches") )) +m) &&
+  git checkout $(echo "$branch" | sed "s/.* //" | sed "s#remotes/[^/]*/##")
+}
+
+# fbrr - checkout git branch (including remote branches), sorted by most recent commit, limit 30 last branches
+fbrr() {
+  local branches branch
+  branches=$(git for-each-ref --count=30 --sort=-committerdate refs/heads/ --format="%(refname:short)") &&
+  branch=$(echo "$branches" |
+           fzf-tmux -d $(( 2 + $(wc -l <<< "$branches") )) +m) &&
+  git checkout $(echo "$branch" | sed "s/.* //" | sed "s#remotes/[^/]*/##")
+}
+
+# fshow - git commit browser
+fshow() {
+  git log --graph --color=always \
+      --format="%C(auto)%h%d %s %C(black)%C(bold)%cr" "$@" |
+  fzf --ansi --no-sort --reverse --tiebreak=index --bind=ctrl-s:toggle-sort \
+      --bind "ctrl-m:execute:
+                (grep -o '[a-f0-9]\{7\}' | head -1 |
+                xargs -I % sh -c 'git show --color=always % | less -R') << 'FZF-EOF'
+                {}
+FZF-EOF"
+}
