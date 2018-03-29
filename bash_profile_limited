@@ -3,19 +3,7 @@ export HISTFILESIZE=
 export HISTSIZE=
 export HISTTIMEFORMAT="[%F %T] 	"
 
-export PIP_INDEX_URL=<YELPS_PYPI_LOCATION>
-
-alias pretty-apperror='~/pg/yelp-main/virtualenv_run/bin/python ~/pg/yelp-main/tools/pretty_error_log'
-
-alias filtered-apperror=<REDACTED>
-
 alias gpoh="git push origin HEAD"
-
-alias rb="review-branch"
-
-alias sr="seagull-run"
-
-alias gsr="git push origin HEAD && seagull-run && review-branch"
 
 # Searches templates, actually ignores stuff in .tox and virtualenv_run
 stf() {
@@ -55,9 +43,6 @@ fetch-deploy() {
     git fetch canon $1 && git co -b {,canon/}$1
 }
 
-alias bizapp-tests='./scripts/jenkins/run_jenkins.sh'
-alias sshprod=<REDACTED>
-alias sshdeploy=<REDACTED>
 skewl() {
     ssh -A <REDACTED> -k "kew list | grep $@"
 }
