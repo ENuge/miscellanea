@@ -152,15 +152,36 @@ fshow() {
 FZF-EOF"
 }
 
+# There's some craziness happening with bash escape codes and colors
+# here and in the PS1 prompt. See http://mywiki.wooledge.org/BashFAQ/053
+# for why I'm using printf and \001. Also, I needed to use
+# backtick-style function calls instead of $(..) style to preserve
+# the value of $? for some reason??
+function nonzero_return() {
+  RETVAL=$?
+  if [[ "$RETVAL" != "0" ]]
+  then
+    printf "\001\e[91m✘\e[m\002"
+  else
+    printf "\001\e[92m✔\e[m\002"
+  fi
+}
+
 # get current branch in git repo
 function parse_git_branch() {
+  # We need to pass along the ret val from the previous command so nonzero_return
+  # can use (which executes later in our PS1 prompt). There's almost certainly
+  # a nicer way of doing this, but c'est la vie.
+  PREV_COMMAND_RET_VAL=$?
   BRANCH=`git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'`
   if [ ! "${BRANCH}" == "" ]
   then
     STAT=`parse_git_dirty`
     echo "[${BRANCH}${STAT}]"
+    exit $PREV_COMMAND_RET_VAL
   else
     echo ""
+    exit $PREV_COMMAND_RET_VAL
   fi
 }
 
@@ -200,6 +221,7 @@ function parse_git_dirty {
 }
 
 export PS1="\[\e[33m\]\w\[\e[m\]:\[\e[33m\]\u\[\e[m\]\`parse_git_branch\`\`nonzero_return\`\[\e[31m\]\\$\[\e[m\] "
+
 
 # Sets bash history to be unlimited, not truncated. Never lose a command!
 export HISTFILESIZE=
