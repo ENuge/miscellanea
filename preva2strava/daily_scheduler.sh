@@ -1,1 +1,0 @@
-cd /Users/eoin/Documents/miscellanea/preva2strava && /usr/local/bin/ruby preva2strava.rb
