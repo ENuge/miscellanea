@@ -2,6 +2,7 @@
 require 'json'
 require 'ostruct'
 require 'pry-nav'
+require 'requests'
 require 'tempfile'
 require_relative '.secret/api_keys'
 
@@ -43,7 +44,7 @@ EOF
 
 workout_templates = {
   'upper' => {
-    name: "🔫 Upper-body Workout 💪",
+    name: "💪 Upper-body Workout 🔫",
     description: UPPER_BODY_DESCRIPTION,
   },
   'lower' => {
@@ -193,18 +194,23 @@ def main(workout_name, description, custom_time, dry_run)
   }
   params['start_date_local'] = Time.now.strftime('%Y-%m-%dT%H:%M:%S.%L%z')
   if custom_time
-    params['elapsed_time'] = custom_time * 60
+    params['elapsed_time'] = custom_time.to_i * 60
   else
     params['elapsed_time'] = 75*60 # Assume 75 minute workouts (Strava accepts time in seconds)
   end
 
   strava_auth_header = {Authorization: "Bearer #{STRAVA_API_KEY}"}
+  activity_id = nil
   if !dry_run
-    Requests.request("POST", strava_url, params: params, headers: strava_auth_header)
+    response = Requests.request("POST", strava_url, params: params, headers: strava_auth_header)
+    activity_id = JSON.parse(response.body)["id"]
   end
 
   puts "============================================================="
   puts "= ⚡️Brodin is pleased with your contribution. Keep it up!⚡️ ="
+  if activity_id
+    puts "= ⚡️Strava: https://www.strava.com/activities/#{activity_id} ⚡️ ="
+  end
   puts "============================================================="
 
   puts "Workout Summary:"
