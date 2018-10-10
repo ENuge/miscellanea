@@ -161,9 +161,9 @@ function nonzero_return() {
   RETVAL=$?
   if [[ "$RETVAL" != "0" ]]
   then
-    printf "\001\e[91m✘\e[m\002"
+    printf "\001\e[91m\002>\001\e[m\002"
   else
-    printf "\001\e[92m✔\e[m\002"
+    printf "\001\e[92m\002>\001\e[m\002"
   fi
 }
 
