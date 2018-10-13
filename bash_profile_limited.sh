@@ -13,6 +13,18 @@ alias curr2e="date +%s"
 alias e2r="date -r"
 
 alias gpoh="git push origin HEAD"
+alias darn="fuck"
+function ggrep() {
+  git grep -I --line-number --break --heading "$@" -- "./*" ":!*.snap" ":!*node_modules/*" ":!*.min.js*" ":!*.jpg" ":!*.png" ":!*.min.css*" ":!*common/assets*" ":!*data/*.json"
+}
+# mgrep means multi - intended to be combined with other greps. All it does right now is remove the --heading
+# flag from the above so that I can grep -v after it more easily.
+# TODO: Figure out how to keep subsequent greps nice and colorized.
+function mgrep() {
+  git grep -I --line-number --break "$@" -- "./*" ":!*.snap" ":!*node_modules/*" ":!*.min.js*" ":!*.jpg" ":!*.png" ":!*.min.css*" ":!*common/assets*" ":!*data/*.json"
+}
+
+alias strava="ruby ~/Documents/strava_uploader/strava.rb"
 
 # Searches templates, actually ignores stuff in .tox and virtualenv_run
 stf() {
