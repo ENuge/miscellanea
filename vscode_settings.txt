@@ -1,0 +1,43 @@
+(There is no way I'll keep this up to date, but alas! Here's my VSCode settings at some point in the past.)
+
+~/Documents/miscellanea:eoin[master]
+> code --list-extensions
+Braver.vscode-solarized
+dbaeumer.vscode-eslint
+esbenp.prettier-vscode
+flowtype.flow-for-vscode
+oderwat.indent-rainbow
+rebornix.ruby
+zhouronghui.propertylist
+
+
+{
+  "editor.minimap.enabled": false,
+  "editor.scrollBeyondLastLine": false,
+  "editor.fontLigatures": true,
+  "editor.fontFamily": "Fira Code, Menlo, Monaco, 'Courier New', monospace",
+  "window.zoomLevel": 0,
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  "ruby.lint": {
+    "ruby": true
+  },
+  "ruby.codeCompletion": "rcodetools",
+  "ruby.intellisense": "rubyLocate",
+  "ruby.format": "rubocop",
+  "[javascript]": {
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true
+  },
+  "javascript.validate.enable": false,
+  "indentRainbow.colors": [
+    "rgba(255, 255, 255, 0)",
+    "rgba(255, 255, 255, 0.03)",
+    "rgba(255, 255, 255, 0.06)",
+    "rgba(255, 255, 255, 0.1)",
+    "rgba(255, 255, 255, 0.06)",
+    "rgba(255, 255, 255, 0.03)"
+  ],
+  "editor.formatOnSave": true,
+  "workbench.colorTheme": "Solarized Dark"
+}
