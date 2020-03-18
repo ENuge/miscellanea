@@ -1,0 +1,1 @@
+Basically, I ran through the problems in my head here. Things are more or less as I'd expect. I used `vmmap` because `pmap` doesn't exist on MacOS, but clearly saw a much larger malloc'ed space when I supply more arguments to my command-line program, as I'd expect. So that's cool.
