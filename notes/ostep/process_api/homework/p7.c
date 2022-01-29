@@ -19,8 +19,8 @@ int main(int argc, char *argv[]) {
   }
   else
   {
-    int* stat_loc = NULL;
-    waitpid(rc, stat_loc, 0);
+    int* statLoc = NULL;
+    waitpid(rc, statLoc, 0);
     printf("Parent done!\n");
   }
 }

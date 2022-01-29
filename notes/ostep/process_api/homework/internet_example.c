@@ -2,8 +2,7 @@
 #include <unistd.h>
 #include <sys/types.h>
 
-int main(void)
-{
+int main(void) {
         int     fd[2], nbytes;
         pid_t   childpid;
         char    string[] = "Hello, world!\n";

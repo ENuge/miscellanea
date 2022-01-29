@@ -1,0 +1,160 @@
+## Solutions
+
+1.
+
+cmd 0 : write(20,u)
+cmd 1 : write(52,M)
+cmd 2 : M
+cmd 3 : write(60,0)
+cmd 4 : write(57,e)
+cmd 5 : trim(57)
+cmd 6 : M
+cmd 7 : trim(52)
+cmd 8 : u
+cmd 9 : u
+
+BOOM!
+
+2. 
+FTL   (empty)
+Block 0          1          2          3          4          5          6          7          8          9          10         11
+Page  0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 1111111111 1111111111
+      0000000000 1111111111 2222222222 3333333333 4444444444 5555555555 6666666666 7777777777 8888888888 9999999999 0000000000 1111111111
+      0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789
+State iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii
+Data  
+Live
+
+cmd   0:: write(58, F) -> success
+FTL   58: 0
+Block 0          1          2          3          4          5          6          7          8          9          10         11
+Page  0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 1111111111 1111111111
+      0000000000 1111111111 2222222222 3333333333 4444444444 5555555555 6666666666 7777777777 8888888888 9999999999 0000000000 1111111111
+      0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789
+State vEEEEEEEEE iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii
+Data  F
+Live  +
+
+cmd   1:: write(46, 9) -> success
+FTL   58: 0  46: 1
+Block 0          1          2          3          4          5          6          7          8          9          10         11
+Page  0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 1111111111 1111111111
+      0000000000 1111111111 2222222222 3333333333 4444444444 5555555555 6666666666 7777777777 8888888888 9999999999 0000000000 1111111111
+      0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789
+State vvEEEEEEEE iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii
+Data  F9
+Live  ++
+cmd   2:: write(31, I) -> success
+FTL   58: 0  46: 1  31:2
+Block 0          1          2          3          4          5          6          7          8          9          10         11
+Page  0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 1111111111 1111111111
+      0000000000 1111111111 2222222222 3333333333 4444444444 5555555555 6666666666 7777777777 8888888888 9999999999 0000000000 1111111111
+      0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789
+State vvvEEEEEEE iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii
+Data  F9I
+Live  +++
+cmd   3:: trim(31) -> success
+FTL   58: 0  46: 1
+Block 0          1          2          3          4          5          6          7          8          9          10         11
+Page  0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 1111111111 1111111111
+      0000000000 1111111111 2222222222 3333333333 4444444444 5555555555 6666666666 7777777777 8888888888 9999999999 0000000000 1111111111
+      0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789
+State vvvEEEEEEE iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii
+Data  F9I
+Live  ++
+cmd   4:: write(35, g) -> success
+FTL   58: 0  46: 1  35: 3
+Block 0          1          2          3          4          5          6          7          8          9          10         11
+Page  0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 1111111111 1111111111
+      0000000000 1111111111 2222222222 3333333333 4444444444 5555555555 6666666666 7777777777 8888888888 9999999999 0000000000 1111111111
+      0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789
+State vvvvEEEEEE iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii
+Data  F9Ig
+Live  ++ +
+cmd   5:: read(46) -> 9
+FTL   58: 0  46: 1  35: 3
+Block 0          1          2          3          4          5          6          7          8          9          10         11
+Page  0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 1111111111 1111111111
+      0000000000 1111111111 2222222222 3333333333 4444444444 5555555555 6666666666 7777777777 8888888888 9999999999 0000000000 1111111111
+      0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789
+State vvvvEEEEEE iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii
+Data  F9Ig
+Live  ++ +
+cmd   6:: read(35) -> g
+FTL   58: 0  46: 1  35: 3
+Block 0          1          2          3          4          5          6          7          8          9          10         11
+Page  0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 1111111111 1111111111
+      0000000000 1111111111 2222222222 3333333333 4444444444 5555555555 6666666666 7777777777 8888888888 9999999999 0000000000 1111111111
+      0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789
+State vvvvEEEEEE iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii
+Data  F9Ig
+Live  ++ +
+cmd   7:: write(44, e) -> success
+FTL   58: 0  46: 1  35: 3  44: 4
+Block 0          1          2          3          4          5          6          7          8          9          10         11
+Page  0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 1111111111 1111111111
+      0000000000 1111111111 2222222222 3333333333 4444444444 5555555555 6666666666 7777777777 8888888888 9999999999 0000000000 1111111111
+      0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789
+State vvvvvEEEEE iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii
+Data  F9Ige
+Live  ++ ++
+cmd   8:: read(58) -> F
+FTL   58: 0  46: 1  35: 3  44:4
+Block 0          1          2          3          4          5          6          7          8          9          10         11
+Page  0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 1111111111 1111111111
+      0000000000 1111111111 2222222222 3333333333 4444444444 5555555555 6666666666 7777777777 8888888888 9999999999 0000000000 1111111111
+      0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789
+State vvvvvEEEEE iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii
+Data  F9Ige
+Live  ++ ++
+cmd   9:: write(79, F) -> success
+FTL   58: 0  46: 1  35: 3  44:4  79:4
+Block 0          1          2          3          4          5          6          7          8          9          10         11
+Page  0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 1111111111 1111111111
+      0000000000 1111111111 2222222222 3333333333 4444444444 5555555555 6666666666 7777777777 8888888888 9999999999 0000000000 1111111111
+      0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789
+State vvvvvvEEEE iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii
+Data  F9IgeF
+Live  ++ +++
+
+FTL    35:  3  44:  4  46:  1  58:  0  79:  5
+Block 0          1          2          3          4          5          6          7          8          9          10         11
+Page  0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 0000000000 1111111111 1111111111
+      0000000000 1111111111 2222222222 3333333333 4444444444 5555555555 6666666666 7777777777 8888888888 9999999999 0000000000 1111111111
+      0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789 0123456789
+State vvvvvvEEEE iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii iiiiiiiiii
+Data  F9IgeF
+Live  ++ +++
+
+BOOM!
+
+3. This changes the percentage of reads that will fail. They'll try to read invalid blocks or already-trimmed blocks. How that will work is very
+straightforward so I'm not going through the rigmarole again...
+
+4. 1000+40+40+10+40+40+0+10+0+10+10 -> 1200 . BOOM.
+
+5. I imagine the direct approach will perform pretty terribly, given it has to erase and rewrite every single time. Or do as it did here and stick
+them all in different blocks.
+
+1040+1040+10+1040+1040+10+10+10 -> 4200. ouch
+
+ohhh right with direct mapping 52 and 57 would go to the same block and thus require an extra read and write to preserve the already-written value
+post-erase, hence +40+10 for the 4250 we expect.
+
+6. Without garbage collection, there's a lot of fragmentation - data occupied as valid, but not marked in the FTL and not live.
+Basically, lots of garbage, as we'd expect.
+
+7. I think knowing when to collect is very heuristic'y, it depends on your workload etc. A somewhat reasonable high-level mark is 7 and a low-level
+mark is 4 but I'm pulling these numbers out of my bum. It depends on things like how long the garbage collector takes to run and how latency
+sensitive are we (can we tolerate a long tail of slow responses?).
+
+8. The garbage collection pops in every now and then and gums up the whole system without about ten operations. Which is to say, it's very
+bursty.
+
+With all the garbage collection, we're seeing a total time of 127440.00 . That's still far faster than the direct-mapped approach, which
+has a total time of 744840.00. Major ouch.
+
+9. Only updating some values can improve the garbage collector's performance because the garbage collection of many values is amortized
+over time by them not being touched again. Direct is awful with a skewed workload because some blocks just get reflashed and programmed
+over and over again all in the same area. The log-structured approach (plus garbage collection) handles this fairly reasonably relatively to the others by
+appending that data over somewhere else.
