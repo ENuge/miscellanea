@@ -1,3 +1,6 @@
+# SEE https://docs.google.com/document/d/1MTLiMpIHQDBAzehVz7lcnsgjwWU_duDtJoL3FfuVGR4/edit
+# FOR THE ASSOCIATED WRITEUP
+
 # Clear the workspace
 rm(list = ls())
 
